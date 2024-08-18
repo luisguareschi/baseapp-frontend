@@ -7,13 +7,13 @@ export default function Home() {
   const router = useRouter();
   const { user, isLoading } = useCurrentUser();
 
-  // if (!isLoading && !user) {
-  //   router.replace("/login");
-  // }
-  //
-  // if (user) {
-  //   router.replace("/home");
-  // }
+  if (!isLoading && !user) {
+    router.replace("/login");
+  }
+
+  if (user) {
+    router.replace("/home");
+  }
 
   return (
     <div className="h-screen w-full flex items-center justify-center">
