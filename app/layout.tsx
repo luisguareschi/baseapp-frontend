@@ -14,14 +14,16 @@ export const metadata: Metadata = {
   description: "A simple finance manager for keeping track of your expenses.",
 };
 
-export default function RootLayout({children}: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
       <body className={font.className}>
-      <Providers>
-        {children}
-        <Toaster />
-      </Providers>
+        <Providers>
+          {children}
+          <Toaster />
+        </Providers>
       </body>
     </html>
   );
