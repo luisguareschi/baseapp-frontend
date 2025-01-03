@@ -10,8 +10,8 @@ const font = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Finance Manager",
-  description: "A simple finance manager for keeping track of your expenses.",
+  title: "BaseApp",
+  description: "A next js template for building apps",
 };
 
 export default function RootLayout({
