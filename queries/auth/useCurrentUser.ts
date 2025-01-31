@@ -23,7 +23,7 @@ const useCurrentUser = () => {
     queryFn: async () => {
       return await getUser();
     },
-    enabled: !!accessToken,
+    retry: 1,
   });
   return {
     user: data,
