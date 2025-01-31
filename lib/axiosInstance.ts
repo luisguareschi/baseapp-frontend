@@ -13,6 +13,8 @@ const createAxiosInstance = () => {
 
   // include the token in the header
   instance.interceptors.request.use(async (request) => {
+    request.url = request.url?.replace("/api", "");
+
     const authToken = localStorage.getItem("token");
     if (authToken && request.headers && !request.headers.Authorization) {
       request.headers.Authorization = `Bearer ${authToken}`;
@@ -26,8 +28,15 @@ const createAxiosInstance = () => {
     async (error) => {
       const originalRequest = error.config;
       if (
-        error.response.status === 401 &&
-        error.response.data.code === "token_not_valid" &&
+        error?.response?.status === 401 &&
+        originalRequest.url?.includes("/auth/refresh/")
+      ) {
+        window.location.href = "/login";
+        return;
+      }
+      if (
+        error?.response?.status === 401 &&
+        error?.response?.data?.code === "token_not_valid" &&
         !originalRequest._retry &&
         localStorage.getItem("refreshToken") &&
         localStorage.getItem("token")
@@ -48,6 +57,15 @@ const createAxiosInstance = () => {
   instance.interceptors.response.use(
     (response) => response,
     (error) => {
+      // Dont show error if the status is 401
+      if (error?.response?.status === 401) {
+        return;
+      }
+      // Dont show error if the request is manually canceled
+      if (error?.code === "ERR_CANCELED") {
+        return;
+      }
+
       parseAxiosError(error);
     },
   );
@@ -56,5 +74,12 @@ const createAxiosInstance = () => {
 };
 
 const axios = createAxiosInstance();
+
+export const customAxios = async <T>(
+  ...args: Parameters<typeof axios>
+): Promise<T> => {
+  const response = await axios(...args);
+  return response.data;
+};
 
 export default axios;

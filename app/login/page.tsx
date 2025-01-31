@@ -1,13 +1,19 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import Input from "@/components/common/input";
-import { Message, Lock } from "react-iconly";
-import { FcGoogle } from "react-icons/fc";
+import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import Spinner from "@/components/common/spinner";
 import { useRouter } from "next/navigation";
 import useLogin from "@/queries/auth/useLogin";
-import useSignUp from "@/queries/auth/useSignUp";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import Spinner from "@/components/common/spinner";
+import Link from "next/link";
 
 const LoginPage = () => {
   const router = useRouter();
@@ -16,29 +22,16 @@ const LoginPage = () => {
       router.replace("/home");
     },
   });
-  const { mutate: signUp, isPending: loadingSignUp } = useSignUp({
-    onSuccess: () => setShowLogin(true),
-  });
   const [loginForm, setLoginForm] = useState({
     email: "",
     password: "",
-    username: "",
   });
-  const [showLogin, setShowLogin] = useState(true);
-
-  const isLoading = loadingSignUp || loadingLogin;
 
   const handleSubmit = () => {
-    // Handle form submission
-    if (showLogin) {
-      login({
-        email: loginForm.email,
-        password: loginForm.password,
-      });
-      return;
-    }
-    // Signup
-    signUp(loginForm);
+    login({
+      email: loginForm.email,
+      password: loginForm.password,
+    });
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,88 +41,76 @@ const LoginPage = () => {
     }));
   };
 
+  const handleForgotPassword = () => {
+    alert("Coming soon");
+  };
+
   return (
-    <div className="flex flex-col h-dvh gap-10 p-6 justify-center relative">
-      <header className="flex flex-col gap-4">
-        <h1 className="text-5xl font-bold text-slate-700">
-          {showLogin && (
-            <>
-              Welcome
-              <br /> Back!
-            </>
-          )}
-          {!showLogin && (
-            <>
-              Create
-              <br /> Account
-            </>
-          )}
-        </h1>
-        <h2 className="text-slate-500">
-          {showLogin && "Login to start using Finance Manager"}
-          {!showLogin && "Sign up to start using Finance Manager"}
-        </h2>
-      </header>
-      <div className="flex flex-col gap-5">
-        {!showLogin && (
-          <Input
-            label="Username"
-            placeholder="Enter your username"
-            iconStart={<Message />}
-            name="username"
-            value={loginForm.username}
-            onChange={handleChange}
-          />
-        )}
-        <Input
-          label="Email"
-          placeholder="Enter your email"
-          type="email"
-          iconStart={<Message />}
-          name="email"
-          value={loginForm.email}
-          onChange={handleChange}
-        />
-        <Input
-          label="Password"
-          placeholder="Enter your password"
-          iconStart={<Lock />}
-          type="password"
-          name="password"
-          value={loginForm.password}
-          onChange={handleChange}
-        />
-        <Button onClick={handleSubmit} disabled={isLoading}>
-          {isLoading && <Spinner />}
-          {showLogin && "Login"}
-          {!showLogin && "Sign up"}
-        </Button>
-        {showLogin && (
-          <>
-            <div className="flex items-center gap-2">
-              <div className="w-full h-0.5 bg-slate-200" />
-              <p className="text-slate-400">or</p>
-              <div className="w-full h-0.5 bg-slate-200" />
+    <div className="flex flex-col h-screen justify-center items-center bg-slate-50">
+      <Card className="min-w-[450px]">
+        <CardHeader className="mb-5">
+          <CardTitle className="text-2xl text-center">BaseApp</CardTitle>
+          <CardDescription className="text-center">
+            Enter your email and password to login
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form
+            className="flex flex-col gap-6"
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSubmit();
+            }}
+          >
+            <div className="grid gap-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="m@example.com"
+                name="email"
+                onChange={handleChange}
+                value={loginForm.email}
+              />
             </div>
-            <Button
-              variant="outline"
-              className="text-slate-600 border-slate-200 active:bg-slate-50"
-            >
-              <FcGoogle className="size-6" />
-              Google
+            <div className="grid gap-2">
+              <div className="flex items-center">
+                <Label htmlFor="password">Password</Label>
+                <a
+                  href="#"
+                  className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                  onClick={handleForgotPassword}
+                >
+                  Forgot your password?
+                </a>
+              </div>
+              <Input
+                id="password"
+                type="password"
+                name="password"
+                onChange={handleChange}
+                value={loginForm.password}
+              />
+            </div>
+            <Button className="w-full" size="default" type="submit">
+              Login
+              {loadingLogin && <Spinner />}
             </Button>
-          </>
-        )}
-      </div>
-      <p className="text-center text-slate-700 absolute bottom-10 left-0 w-screen">
-        Don&apos;t have an account?{" "}
-        <button
-          className="text-blue-500 font-semibold focus:underline"
-          onClick={() => setShowLogin(!showLogin)}
-        >
-          Sign up
-        </button>
-      </p>
+          </form>
+          <div className="flex justify-center items-center mt-4">
+            <Button
+              variant="link"
+              asChild
+              size="sm"
+              className="text-xs font-medium text-slate-500"
+            >
+              <Link href="https://luisguareschi.com">
+                Made by Luis Guareschi
+              </Link>
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };
