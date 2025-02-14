@@ -32,4 +32,18 @@ Build:
 yarn build
 ```
 
+Generate API hooks:
+
+```bash
+yarn api
+```
+
+Lint:
+
+```bash
+yarn lint:fix
+```
+
+
+
 
