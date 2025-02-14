@@ -1,9 +1,9 @@
-import Spinner from "./spinner";
+import { BarLoader } from "./bar-loader";
 
 const FullScreenLoading = () => {
   return (
     <div className="h-screen w-full flex items-center justify-center">
-      <Spinner className="size-10 text-blue-500" />
+      <BarLoader className="min-w-[300px]" />
     </div>
   );
 };

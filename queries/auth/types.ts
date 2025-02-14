@@ -1,5 +1,3 @@
-export interface IUser {
-  id: number;
-  username: string;
-  email: string;
-}
+import { User } from "@/api/baseAppBackendAPI.schemas";
+
+export interface IUser extends User {}

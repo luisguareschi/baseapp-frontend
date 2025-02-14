@@ -77,7 +77,7 @@ const LoginPage = () => {
               <div className="flex items-center">
                 <Label htmlFor="password">Password</Label>
                 <a
-                  href="#"
+                  href=""
                   className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
                   onClick={handleForgotPassword}
                 >
